@@ -1,7 +1,7 @@
-import { span, div, text, input, removeNode, append } from './genElm';
-import { validateEmail } from './utils';
-import { store } from './store';
-import appendStye from './style';
+import { span, div, text, input, removeNode, append } from './lib/genElm';
+import { validateEmail } from './lib/utils';
+import { store } from './lib/store';
+import appendStye from './style/style';
 import {
   EmailsInputObj,
   validatorType,
@@ -9,7 +9,7 @@ import {
   hiddenEmailInputTuple,
   emailTextInputProps,
   emailTextInputTuple,
-} from './types';
+} from './type/types';
 
 // appends style to DOM and returns base class
 const defaultBaseClass = appendStye();
@@ -119,16 +119,16 @@ function emailTextInput({ addEmail, placeholder }: emailTextInputProps): emailTe
     className: 'ei-text-input',
     attributes: { type: 'text', placeholder },
     events: {
-      input: (e: InputEvent) => {
-        const target = e.target as HTMLInputElement;
-        if (e.inputType === 'insertFromPaste' && target.value) {
-          if (target.value) {
-            (target.value as string)
-              .split(',')
-              .map((str) => str.trim())
-              .filter(Boolean)
-              .forEach(addEmail);
-          }
+      paste: (e: ClipboardEvent) => {
+        const value = (e.clipboardData || (window as any).clipboardData).getData('text');
+        console.log(e, value);
+        if (value) {
+          e.preventDefault();
+          (value as string)
+            .split(',')
+            .map((str) => str.trim())
+            .filter(Boolean)
+            .forEach(addEmail);
         }
       },
       keypress: (e: KeyboardEvent) => {

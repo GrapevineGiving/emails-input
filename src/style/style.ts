@@ -1,4 +1,4 @@
-import { randomString } from './utils';
+import { randomString } from '../lib/utils';
 
 // returns component style that wrapped into a root selector
 function generateStyle(rootSelector = ''): string {

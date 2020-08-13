@@ -1,4 +1,4 @@
-import { genElmType, ExtendedHTMLElement } from './types';
+import { genElmType, ExtendedHTMLElement } from '../type/types';
 
 // a helper to create DOM element in one step. it accepts properties and children;
 export const genElm: genElmType = (type) => ({ className, events, attributes } = {}, ...children) => {
