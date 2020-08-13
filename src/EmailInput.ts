@@ -1,24 +1,24 @@
 import { span, div, text, input, removeNode, append } from './genElm';
-import { validateEmail, validatorType } from './utils';
-import { emailStore } from './store';
+import { validateEmail } from './utils';
+import { store } from './store';
 import appendStye from './style';
+import { EmailsInputObj, validatorType, EmailsInputProps, hiddenEmailInputType, emailTextInputType } from './types';
 
-type Props = {
-  name: string;
-  list: string[];
-  placeholder: string;
-  validator: validatorType;
-  baseClass: string;
-};
-
+// appends style to DOM and returns base class
 const defaultBaseClass = appendStye();
 
 export default function EmailsInput(
   container: Node,
-  { name, list, placeholder = 'add more people…', validator = validateEmail, baseClass = defaultBaseClass }: Props,
-): any {
+  {
+    name,
+    list,
+    placeholder = 'add more people…',
+    validator = validateEmail,
+    baseClass = defaultBaseClass,
+  }: EmailsInputProps,
+): EmailsInputObj {
   // email store to manage adding an removing emails
-  const { pushEmail, getEmails } = emailStore((emails: string[]) => {
+  const { push: pushEmail, get: getEmails } = store((emails: string[]) => {
     setEmailInput(emails.join(', '));
     clearTextInput();
   });
@@ -68,7 +68,7 @@ export default function EmailsInput(
 }
 
 // create email block
-function emailBlock(email: string, remove: any, validator: validatorType) {
+function emailBlock(email: string, remove: () => void, validator: validatorType) {
   const block = div(
     {
       className: `email-block ${validator(email) ? '' : 'invalid'}`,
@@ -77,9 +77,9 @@ function emailBlock(email: string, remove: any, validator: validatorType) {
     span({
       className: 'close',
       events: {
-        click(e: any) {
+        click() {
           removeNode(block);
-          remove(e);
+          remove();
         },
       },
     }),
@@ -87,16 +87,16 @@ function emailBlock(email: string, remove: any, validator: validatorType) {
   return block;
 }
 
-function emailTextInput({ addEmail, placeholder }: any): any {
+const emailTextInput: emailTextInputType = function emailTextInput({ addEmail, placeholder }) {
   const elm = input({
     className: 'text-input',
     attributes: { type: 'text', placeholder },
     events: {
-      input: (e) => {
-        const { value } = e.target;
-        if (e.inputType === 'insertFromPaste' && value) {
-          if (e.target.value) {
-            (e.target.value as string)
+      input: (e: InputEvent) => {
+        const target = e.target as HTMLInputElement;
+        if (e.inputType === 'insertFromPaste' && target.value) {
+          if (target.value) {
+            (target.value as string)
               .split(',')
               .map((str) => str.trim())
               .filter(Boolean)
@@ -104,40 +104,40 @@ function emailTextInput({ addEmail, placeholder }: any): any {
           }
         }
       },
-      keypress: (e) => {
+      keypress: (e: KeyboardEvent) => {
         const keyCode = e.keyCode || e.which;
-        if (keyCode == '13' || keyCode == '44') {
+        if (keyCode === 13 || keyCode === 44) {
           e.preventDefault(); // preventing to add comma into the input;
-          if (e.target.value) {
-            addEmail(e.target.value);
+          if ((e.target as HTMLInputElement).value) {
+            addEmail((e.target as HTMLInputElement).value);
           }
           return false;
         }
       },
-      blur: (e) => {
-        if (e.target.value) {
-          addEmail(e.target.value);
+      blur: (e: Event) => {
+        if ((e.target as HTMLInputElement).value) {
+          addEmail((e.target as HTMLInputElement).value);
         }
       },
     },
-  });
+  }) as HTMLInputElement;
   return [
     elm,
     () => {
       elm.value = '';
     },
   ];
-}
+};
 
-function hiddenEmailInput(name: string): any {
+const hiddenEmailInput: hiddenEmailInputType = function hiddenEmailInput(name) {
   const elm = input({
     className: 'email-input',
     attributes: { type: 'email', multiple: '', name },
-  });
+  }) as HTMLInputElement;
   return [
     elm,
     (value: string) => {
       elm.value = value;
     },
   ];
-}
+};

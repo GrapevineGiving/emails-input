@@ -4,36 +4,36 @@ const counter = (start: number) => {
 };
 
 type subscribeType = (list: string[]) => void;
-type EmailStore = {
-  pushEmail: (email: string) => () => void;
-  getEmails: () => string[];
+type Store = {
+  push: (data: string) => () => void;
+  get: () => string[];
 };
 
-export function emailStore(subscribe: subscribeType): EmailStore {
+export function store(subscribe: subscribeType): Store {
   // simple uid generator;
   const uid = counter(1);
 
-  const emails: { [key: string]: string } = {};
+  const data: { [key: string]: string } = {};
 
-  const getEmails = () => Object.keys(emails).map((id: string) => emails[id]);
+  const get = () => Object.keys(data).map((id: string) => data[id]);
 
-  // pushes an email to the store ans returns the remover
-  function pushEmail(email: string) {
+  // pushes an item to the store ans returns the remover
+  function push(email: string) {
     const id = uid();
-    emails[id] = email;
-    subscribe(getEmails());
+    data[id] = email;
+    subscribe(get());
 
-    return () => {
-      delete emails[id];
-      subscribe(getEmails());
+    return function remove() {
+      delete data[id];
+      subscribe(get());
     };
   }
 
   // runs subscribe after first tick
-  setTimeout(() => subscribe(getEmails()), 0);
+  setTimeout(() => subscribe(get()), 0);
 
   return {
-    pushEmail,
-    getEmails,
+    push,
+    get,
   };
 }
