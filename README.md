@@ -11,7 +11,7 @@
 
 ## Demo
 
-the component [demo page](javadkh2.github.io/emails-input)
+the component [demo page](https://javadkh2.github.io/emails-input)
 
 ## installation
 
