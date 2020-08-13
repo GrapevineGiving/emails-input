@@ -15,10 +15,10 @@ the component [demo page](javadkh2.github.io/emails-input)
 
 ## installation
 
-`emails-input` is available as an [npm package](https://www.npmjs.com/package/rich-emails-input).
+`emails-input` is available as an [npm package](https://www.npmjs.com/package/another-emails-input).
 
 ```
-npm install rich-emails-input
+npm install another-emails-input
 ```
 
 ## Usage
@@ -26,7 +26,7 @@ npm install rich-emails-input
 It is possible to use the component as a global object.
 
 ```HTML
-<script src="node_modules/rich-inputs-email/dist/index.js"></script>
+<script src="node_modules/another-emails-input/dist/emailInput.js"></script>
 <div id="emails-input"></div>
 <script>
     var container = document.getElementById('emails-input');
@@ -61,7 +61,7 @@ Using in forms
 It is also possible to use the component as a module in your JS file
 
 ```javascript
-import EmailInput from 'rich-email-input';
+import EmailInput from 'another-emails-input';
 
 function subscribe(emails){
     console.log(emails)

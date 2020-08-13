@@ -1,17 +1,18 @@
 {
-  "name": "emails-input",
+  "name": "another-emails-input",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "start": "webpack --watch",
+    "build": "webpack & tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/javadkh2/emails-input.git"
   },
-  "author": "Javadkh <khalilian.javad@gmail.com>",
+  "author": "Javadkh2 <khalilian.javad@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/javadkh2/emails-input/issues"
