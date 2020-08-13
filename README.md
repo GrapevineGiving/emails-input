@@ -1,21 +1,21 @@
-# emails-input
+# another-emails-input
 
-`emails-input` is an alternative for normal input type email with the following features
+**another-emails-input** is an `<input type="email" multiple>` but more fancy .
 
-- Interactive adding emails to the input.
-- Automatically validating inputs
-- Generating removable email blocks
-- Getting emails as an array from the API
-- Adding emails to the component throw API
-- No dependency to external libs
+## Features
+
+- Easily adding and removing emails.
+- Automatically validating emails
+- Easy API to use and to control
+- No dependency 
 
 ## Demo
 
-the component [demo page](https://javadkh2.github.io/emails-input)
+[Demo page](https://javadkh2.github.io/emails-input)
 
 ## installation
 
-`emails-input` is available as an [npm package](https://www.npmjs.com/package/another-emails-input).
+`another-emails-input` is available as an [npm package](https://www.npmjs.com/package/another-emails-input).
 
 ```
 npm install another-emails-input
@@ -23,7 +23,7 @@ npm install another-emails-input
 
 ## Usage
 
-It is possible to use the component as a global object.
+Using the component as a global function.
 
 ```HTML
 <script src="node_modules/another-emails-input/dist/emailInput.js"></script>
@@ -37,7 +37,7 @@ It is possible to use the component as a global object.
 </script>
 ```
 
-Using in forms
+Using the component in forms
 
 ```HTML
 <form onsumbit="onSubmit(e)">
@@ -58,33 +58,39 @@ Using in forms
 </script>
 ```
 
-It is also possible to use the component as a module in your JS file
+using the component as a module
 
 ```javascript
 import EmailInput from 'another-emails-input';
 
-function subscribe(emails){
+function onChange(emails){
     console.log(emails)
 }
 
-const { addEmail, getEmailsCount, getEmails } = EmailInput(container, { name: 'my-email-input', subscribe });
+const { addEmail, getEmailsCount, getEmails } = EmailInput(container, { name: 'my-email-input', onChange });
 ```
 
 ## Parameters
-`container` : its the container element that the component will be rendered there.
-`options` : extra options to work with the component.
+* `container` : the component will be rendered there.
+* `options` : extra options.
 ### Options
 | name | type | default | description
 |------|------|---------|------------
 | name | string| `''` | input element name for sending data as form-data or reding input value in submit function
 | list | string[]| `[]` | the initial emails list
 | placeholder | `'add more people...'` |string | the place holder text 
-| validator | `(email)=>boolean` | general email validator | overriding default email validator and pass your function
+| validator | `(string)=>boolean` | general email validator | overriding default email validator and pass your function
 | baseClass | random name |string| override default style by passing base-class - *Note: the component doesn't support partial styling at the current version. So you should take care of all stylings if you pass baseClass*
-| onChange | `(string[])=>void` | null | Subscribe to the email changes, you might need this functionality if you want to connect your component with frameworks state changes 
+| onChange | `(string[])=>void` | null | Email changes callback, you might need this functionality if you want to use the component in UI frameworks, 
 
-### Custom styling
-if you pass baseClass the component you should add style based on the following classes. if you don't pass the baseClass then the component with generate a random class to prevent conflict with other styles.
+## Output
+* **addEmail** : it adds email to the component `(string)=> void`
+* **getEmailsCount** : it returns emails count `()=> number`
+* **getEmailsCount** : it returns emails as an list `()=>string[]`
+
+
+## Custom styling
+By passing baseClass to the component you can override the default style. use the following classes to apply the custom style.
 * `ei-component-wrapper` : main component wrapper 
 * `ei-email-input` : the email input
 * `ei-emails-wrapper`: emails part wrapper
