@@ -1,4 +1,4 @@
-const counter = (start: number) => {
+const counter = (start = 1) => {
   let count = start;
   return () => count++;
 };
@@ -11,7 +11,7 @@ type Store = {
 
 export function store(subscribe: subscribeType): Store {
   // simple uid generator;
-  const uid = counter(1);
+  const uid = counter();
 
   const data: { [key: string]: string } = {};
 

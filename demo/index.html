@@ -70,6 +70,7 @@
       var emailInput = EmailsInput(inputContainerNode, {
         name: 'emails-input',
         list: ['javad@gmail.com', 'reza@yahoo.com'],
+        onChange : (data)=>console.log("emails",data),
       });
       function addRandomEmail(){
         emailInput.addEmail(generateRandomEmail());

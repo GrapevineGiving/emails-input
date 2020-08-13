@@ -14,6 +14,14 @@ import {
 // appends style to DOM and returns base class
 const defaultBaseClass = appendStye();
 
+// Renders a rich emails input to the element
+// for flexibility it accepts
+// name: that will be added to a normal input email for using in submitting forms
+// list: initial list of emails
+// validator: for overriding default email validator function
+// baseClass: for applying custom style to the component.
+// if you pass it you should handel styling yourself
+// it returns a tuple of function to control the component
 export default function EmailsInput(
   container: Node,
   {
@@ -22,12 +30,16 @@ export default function EmailsInput(
     placeholder = 'add more people…',
     validator = validateEmail,
     baseClass = defaultBaseClass,
+    onChange,
   }: EmailsInputProps,
 ): EmailsInputObj {
   // email store to manage adding an removing emails
   const { push: pushEmail, get: getEmails } = store((emails: string[]) => {
     setEmailInput(emails.join(', '));
     clearTextInput();
+    if (onChange) {
+      onChange(emails);
+    }
   });
 
   function addEmail(text: string) {
@@ -42,14 +54,14 @@ export default function EmailsInput(
 
   // a wrapper element to render email blocks
   const emailsWrapper = div(
-    { className: 'emails-wrapper' },
+    { className: 'ei-emails-wrapper' },
     ...list.map((email) => emailBlock(email, pushEmail(email), validator)),
   );
 
   // main wrapper of the component
   const wrapper = div(
     {
-      className: `${baseClass} component-wrapper`,
+      className: `${baseClass} ei-component-wrapper`,
       events: {
         click: () => {
           textInput.focus();
@@ -78,11 +90,11 @@ export default function EmailsInput(
 function emailBlock(email: string, remove: () => void, validator: validatorType) {
   const block = div(
     {
-      className: `email-block ${validator(email) ? '' : 'invalid'}`,
+      className: `ei-email-block ${validator(email) ? '' : 'ei-invalid'}`,
     },
-    span({ className: 'text' }, text(email)),
+    span({ className: 'ei-text' }, text(email)),
     span({
-      className: 'close',
+      className: 'ei-close',
       events: {
         click() {
           removeNode(block);
@@ -94,9 +106,10 @@ function emailBlock(email: string, remove: () => void, validator: validatorType)
   return block;
 }
 
+// create text input element
 function emailTextInput({ addEmail, placeholder }: emailTextInputProps): emailTextInputTuple {
   const elm = input({
-    className: 'text-input',
+    className: 'ei-text-input',
     attributes: { type: 'text', placeholder },
     events: {
       input: (e: InputEvent) => {
@@ -136,9 +149,10 @@ function emailTextInput({ addEmail, placeholder }: emailTextInputProps): emailTe
   ];
 }
 
+// creating email input element
 function hiddenEmailInput(name: string): hiddenEmailInputTuple {
   const elm = input({
-    className: 'email-input',
+    className: 'ei-email-input',
     attributes: { type: 'email', multiple: '', name },
   }) as HTMLInputElement;
   return [

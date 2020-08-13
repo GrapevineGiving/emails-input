@@ -3,8 +3,8 @@ import { randomString } from './utils';
 // returns component style that wrapped into a root selector
 function generateStyle(rootSelector = ''): string {
   // generating uniq selectors by adding baseSelector;
-  const baseSelector = `${rootSelector}.component-wrapper`;
-  const emailBlock = `${baseSelector} .emails-wrapper .email-block`;
+  const baseSelector = `${rootSelector}.ei-component-wrapper`;
+  const emailBlock = `${baseSelector} .ei-emails-wrapper .ei-email-block`;
   return `
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap');
 
@@ -21,13 +21,13 @@ function generateStyle(rootSelector = ''): string {
         width: 100%;
         overflow: auto;
     }
-    ${baseSelector} .email-input{
+    ${baseSelector} .ei-email-input{
         display: none;
     }
-    ${baseSelector} .emails-wrapper {
+    ${baseSelector} .ei-emails-wrapper {
         display: inline;
     }
-    ${baseSelector} .text-input {
+    ${baseSelector} .ei-text-input {
         border: none;
         outline: none;
         min-width: 200px;
@@ -35,7 +35,7 @@ function generateStyle(rootSelector = ''): string {
         margin: 0 4px 4px 0;
         line-height: 1.6;
     }
-    ${baseSelector} .emails-wrapper .email-block {
+    ${baseSelector} .ei-emails-wrapper .ei-email-block {
         background: rgba(102, 153, 255, 0.2);
         border-radius: 100px;
         display: inline-block;
@@ -43,7 +43,7 @@ function generateStyle(rootSelector = ''): string {
         margin: 0 4px 4px 0;
         white-space: nowrap;
     }
-    ${baseSelector} .emails-wrapper .email-block.invalid {
+    ${baseSelector} .ei-emails-wrapper .ei-email-block.ei-invalid {
         background: white;
         border-bottom: dashed red 1px;
         border-radius: 0;
@@ -51,15 +51,15 @@ function generateStyle(rootSelector = ''): string {
         margin-left: 4px;
         margin-right: 4px
     }
-    ${emailBlock} .text {
+    ${emailBlock} .ei-text {
         padding-right: 8px;
     }
-    ${emailBlock} .close {
+    ${emailBlock} .ei-close {
         position: relative;
         padding: 0 4px;
         cursor: pointer;
     }
-    ${emailBlock} .close:before, .close:after {
+    ${emailBlock} .ei-close:before, .ei-close:after {
         position: absolute;
         left: 6;
         top: 4px;
@@ -68,10 +68,10 @@ function generateStyle(rootSelector = ''): string {
         width: 1px;
         background-color: #050038;
     }
-    ${emailBlock} .close:before {
+    ${emailBlock} .ei-close:before {
         transform: rotate(45deg);
     }
-    ${emailBlock} .close:after {
+    ${emailBlock} .ei-close:after {
         transform: rotate(-45deg);
     }
     `;

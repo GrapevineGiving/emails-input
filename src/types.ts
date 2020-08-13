@@ -24,6 +24,7 @@ export type EmailsInputProps = {
   placeholder: string;
   validator: validatorType;
   baseClass: string;
+  onChange?: (emails: string[]) => void;
 };
 
 export type EmailsInputObj = {
