@@ -20,7 +20,7 @@ export const genElm: genElmType = (type) => ({ className, events, attributes } =
   }
 
   if (children) {
-    children.forEach((child) => elm.appendChild(child));
+    append(elm, ...children);
   }
 
   elm.clearListeners = function () {

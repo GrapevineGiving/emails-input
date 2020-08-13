@@ -1,13 +1,22 @@
 import { span, div, text, input, removeNode, append } from './genElm';
-import { validateEmail } from './validation';
+import { validateEmail, validatorType } from './utils';
 import { emailStore } from './store';
+import appendStye from './style';
 
 type Props = {
   name: string;
   list: string[];
+  placeholder: string;
+  validator: validatorType;
+  baseClass: string;
 };
 
-export default function EmailsInput(container: Node, { name, list }: Props): any {
+const defaultBaseClass = appendStye();
+
+export default function EmailsInput(
+  container: Node,
+  { name, list, placeholder = 'add more people…', validator = validateEmail, baseClass = defaultBaseClass }: Props,
+): any {
   // email store to manage adding an removing emails
   const { pushEmail, getEmails } = emailStore((emails: string[]) => {
     setEmailInput(emails.join(', '));
@@ -15,11 +24,11 @@ export default function EmailsInput(container: Node, { name, list }: Props): any
   });
 
   function addEmail(text: string) {
-    append(emailsWrapper, emailBlock(text, pushEmail(text)));
+    append(emailsWrapper, emailBlock(text, pushEmail(text), validator));
   }
 
   // defined text input
-  const [textInput, clearTextInput] = emailTextInput(addEmail);
+  const [textInput, clearTextInput] = emailTextInput({ addEmail, placeholder });
 
   // hidden email input fo using on forms
   const [emailInput, setEmailInput] = hiddenEmailInput(name);
@@ -27,52 +36,72 @@ export default function EmailsInput(container: Node, { name, list }: Props): any
   // a wrapper element to render email blocks
   const emailsWrapper = div(
     { className: 'emails-wrapper' },
-    ...list.map((email) => emailBlock(email, pushEmail(email))),
+    ...list.map((email) => emailBlock(email, pushEmail(email), validator)),
   );
 
-  container.appendChild(div({ className: 'component-wrapper' }, emailInput, emailsWrapper, textInput));
+  // main wrapper of the component
+  const wrapper = div(
+    {
+      className: `${baseClass} component-wrapper`,
+      events: {
+        click: () => {
+          textInput.focus();
+        },
+      },
+    },
+    emailInput,
+    emailsWrapper,
+    textInput,
+  );
+
+  // clear container to remove fallback
+  container.textContent = '';
+
+  // append wrapper to the container
+  container.appendChild(wrapper);
 
   return {
     getEmails,
     addEmail,
+    getEmailsCount: () => getEmails().length,
   };
 }
 
 // create email block
-function emailBlock(email: string, remove: any) {
+function emailBlock(email: string, remove: any, validator: validatorType) {
   const block = div(
     {
-      className: `email-block ${validateEmail(email) ? '' : 'invalid'}`,
+      className: `email-block ${validator(email) ? '' : 'invalid'}`,
     },
     span({ className: 'text' }, text(email)),
-    span(
-      {
-        className: 'close-icon',
-        events: {
-          click(e: any) {
-            removeNode(block);
-            remove(e);
-          },
+    span({
+      className: 'close',
+      events: {
+        click(e: any) {
+          removeNode(block);
+          remove(e);
         },
       },
-      text('x'),
-    ),
+    }),
   );
   return block;
 }
 
-function emailTextInput(addEmail): any {
+function emailTextInput({ addEmail, placeholder }: any): any {
   const elm = input({
     className: 'text-input',
-    attributes: { type: 'text', placeholder: 'Enter email' },
+    attributes: { type: 'text', placeholder },
     events: {
       input: (e) => {
         const { value } = e.target;
         if (e.inputType === 'insertFromPaste' && value) {
           if (e.target.value) {
-            addEmail(e.target.value);
+            (e.target.value as string)
+              .split(',')
+              .map((str) => str.trim())
+              .filter(Boolean)
+              .forEach(addEmail);
           }
-          return;
         }
       },
       keypress: (e) => {
@@ -85,12 +114,19 @@ function emailTextInput(addEmail): any {
           return false;
         }
       },
+      blur: (e) => {
+        if (e.target.value) {
+          addEmail(e.target.value);
+        }
+      },
     },
   });
-  const clear = () => {
-    elm.value = '';
-  };
-  return [elm, clear];
+  return [
+    elm,
+    () => {
+      elm.value = '';
+    },
+  ];
 }
 
 function hiddenEmailInput(name: string): any {

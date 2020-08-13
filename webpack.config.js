@@ -17,6 +17,7 @@ module.exports = {
   },
   output: {
     filename: 'bundle.js',
+    library: 'emailInput',
     path: path.resolve(__dirname, 'dist'),
   },
 };
