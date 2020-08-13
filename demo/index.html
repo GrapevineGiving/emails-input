@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet" />
     <style>
-      .share-board{
+      .share-board {
         max-width: 800px;
         margin: 100px auto;
         background: white;
@@ -15,36 +15,36 @@
         overflow: hidden;
         font-family: 'Open Sans';
       }
-      #emails-input{
+      #emails-input {
         height: 96px;
       }
-      .share-board .content{
+      .share-board .content {
         padding: 32px 50px 24px 50px;
-        background: #F8F8F7;
+        background: #f8f8f7;
       }
-      .share-board .content .share-board-header{
+      .share-board .content .share-board-header {
         font-weight: normal;
         font-style: normal;
         font-size: 20px;
         margin: 0;
         margin-bottom: 24px;
       }
-      .share-board .content .share-board-header strong{
+      .share-board .content .share-board-header strong {
         font-weight: 700;
       }
-      .share-board .actions{
+      .share-board .actions {
         padding: 24px 50px 32px 50px;
         background: white;
       }
       .share-board .actions button {
-        background: #4262FF;
+        background: #4262ff;
         border-radius: 6px;
         border: none;
         color: white;
         padding: 8px 16px;
         line-height: 24px;
         font-weight: 200;
-        margin:0;
+        margin: 0;
         margin-right: 16px;
         outline: none;
       }
@@ -70,13 +70,15 @@
       var emailInput = EmailsInput(inputContainerNode, {
         name: 'emails-input',
         list: ['javad@gmail.com', 'reza@yahoo.com'],
-        onChange : (data)=>console.log("emails",data),
+        onChange: function (data) {
+          console.log('emails', data);
+        },
       });
-      function addRandomEmail(){
+      function addRandomEmail() {
         emailInput.addEmail(generateRandomEmail());
       }
-      function alertEmailsCount(){
-        alert("Emails count: "+ emailInput.getEmailsCount());
+      function alertEmailsCount() {
+        alert('Emails count: ' + emailInput.getEmailsCount());
       }
     </script>
   </body>
