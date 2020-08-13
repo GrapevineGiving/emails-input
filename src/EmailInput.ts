@@ -91,12 +91,19 @@ function emailBlock(email: string, remove: () => void, validator: validatorType)
   const block = div(
     {
       className: `ei-email-block ${validator(email) ? '' : 'ei-invalid'}`,
+      events: {
+        click(e: Event) {
+          // we need this lin to prevent to focus on input
+          e.stopPropagation();
+        },
+      },
     },
     span({ className: 'ei-text' }, text(email)),
     span({
       className: 'ei-close',
       events: {
-        click() {
+        click(e: Event) {
+          e.stopPropagation();
           removeNode(block);
           remove();
         },
