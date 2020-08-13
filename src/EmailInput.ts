@@ -2,7 +2,14 @@ import { span, div, text, input, removeNode, append } from './genElm';
 import { validateEmail } from './utils';
 import { store } from './store';
 import appendStye from './style';
-import { EmailsInputObj, validatorType, EmailsInputProps, hiddenEmailInputType, emailTextInputType } from './types';
+import {
+  EmailsInputObj,
+  validatorType,
+  EmailsInputProps,
+  hiddenEmailInputTuple,
+  emailTextInputProps,
+  emailTextInputTuple,
+} from './types';
 
 // appends style to DOM and returns base class
 const defaultBaseClass = appendStye();
@@ -87,7 +94,7 @@ function emailBlock(email: string, remove: () => void, validator: validatorType)
   return block;
 }
 
-const emailTextInput: emailTextInputType = function emailTextInput({ addEmail, placeholder }) {
+function emailTextInput({ addEmail, placeholder }: emailTextInputProps): emailTextInputTuple {
   const elm = input({
     className: 'text-input',
     attributes: { type: 'text', placeholder },
@@ -127,9 +134,9 @@ const emailTextInput: emailTextInputType = function emailTextInput({ addEmail, p
       elm.value = '';
     },
   ];
-};
+}
 
-const hiddenEmailInput: hiddenEmailInputType = function hiddenEmailInput(name) {
+function hiddenEmailInput(name: string): hiddenEmailInputTuple {
   const elm = input({
     className: 'email-input',
     attributes: { type: 'email', multiple: '', name },
@@ -140,4 +147,4 @@ const hiddenEmailInput: hiddenEmailInputType = function hiddenEmailInput(name) {
       elm.value = value;
     },
   ];
-};
+}

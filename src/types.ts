@@ -32,9 +32,11 @@ export type EmailsInputObj = {
   getEmailsCount: () => number;
 };
 
-export type hiddenEmailInputType = (name: string) => [HTMLInputElement, (value: string) => void];
+export type hiddenEmailInputTuple = [HTMLInputElement, (value: string) => void];
 
-export type emailTextInputType = (props: {
+export type emailTextInputProps = {
   addEmail: (email: string) => void;
   placeholder: string;
-}) => [HTMLInputElement, () => void];
+};
+
+export type emailTextInputTuple = [HTMLInputElement, () => void];
