@@ -1,14 +1,11 @@
-import { span, div, text, input, removeNode, append } from './lib/genElm';
-import { validateEmail } from './lib/utils';
+import emailsWrapper from './elements/emailsWrapper';
+import emailTextInput from './elements/emailTextInput';
+import hiddenEmailInput from './elements/hiddenEmailInput';
+import { div } from './lib/genElm';
 import { store } from './lib/store';
+import { validateEmail } from './lib/utils';
 import appendStye from './style/style';
-import {
-  EmailsInputObj,
-  EmailsInputProps,
-  hiddenEmailInputTuple,
-  emailTextInputProps,
-  emailTextInputTuple,
-} from './type/types';
+import { EmailsInputObj, EmailsInputProps } from './type/types';
 
 // appending style to DOM and returning base class
 const defaultBaseClass = appendStye();
@@ -34,7 +31,6 @@ export default function EmailsInput(
   const { pushEmail, getItems, getValidEmails, getValidEmailsCount } = store((emails) => {
     // updates email input element - we need this input in forms.
     setEmailInput(emails.join(', '));
-
     clearTextInput();
 
     if (onChange) {
@@ -46,7 +42,8 @@ export default function EmailsInput(
   // add an email item to the store and append the email block
   function addEmailItem(email: string) {
     const isValid = validator(email);
-    append(emailsWrapper, emailBlock(email, pushEmail({ email, isValid }), isValid));
+    const itemRemover = pushEmail({ email, isValid });
+    appendEmail(email, itemRemover, isValid);
   }
 
   // split text to emails
@@ -65,7 +62,7 @@ export default function EmailsInput(
   const [emailInput, setEmailInput] = hiddenEmailInput(name);
 
   // wrapper element to render emails blocks
-  const emailsWrapper = div({ className: 'ei-emails-wrapper' });
+  const [emailsWrapperElm, appendEmail] = emailsWrapper();
 
   // main wrapper of the component
   const wrapper = div(
@@ -78,7 +75,7 @@ export default function EmailsInput(
       },
     },
     emailInput,
-    emailsWrapper,
+    emailsWrapperElm,
     textInput,
   );
 
@@ -98,93 +95,4 @@ export default function EmailsInput(
     getValidEmailsCount,
     addEmail,
   };
-}
-
-// create email block
-function emailBlock(email: string, remove: () => void, isValid: boolean) {
-  const block = div(
-    {
-      className: `ei-email-block ${isValid ? '' : 'ei-invalid'}`,
-      events: {
-        click(e: Event) {
-          // we need this lin to prevent to focus on input
-          e.stopPropagation();
-        },
-      },
-    },
-    span({ className: 'ei-text' }, text(email)),
-    span({
-      className: 'ei-close',
-      events: {
-        click(e: Event) {
-          e.stopPropagation();
-          removeNode(block);
-          remove();
-        },
-      },
-    }),
-  );
-  return block;
-}
-
-// create text input element
-function emailTextInput({ addEmail, placeholder }: emailTextInputProps): emailTextInputTuple {
-  const elm = input({
-    className: 'ei-text-input',
-    attributes: { type: 'text', placeholder },
-    events: {
-      paste: (e: ClipboardEvent) => {
-        // IE11 doesn't support input event so we have to use paste event too
-        const value = (e.clipboardData || (window as any).clipboardData).getData('text');
-        if (value) {
-          e.preventDefault();
-          addEmail(value);
-        }
-      },
-      input: (e: InputEvent) => {
-        // in some android devices keypress event doesn't fire for all keys
-        // so input event could cover the functionality
-        const value = (e.target as HTMLInputElement).value;
-        if (value && value.search(',') >= 0) {
-          addEmail(value);
-        }
-      },
-      keypress: (e: KeyboardEvent) => {
-        const keyCode = e.keyCode || e.which;
-        const value = (e.target as HTMLInputElement).value;
-        if (keyCode === 13 || keyCode === 44) {
-          e.preventDefault(); // preventing to add comma into the input;
-          if (value) {
-            addEmail(value);
-          }
-          return false;
-        }
-      },
-      blur: (e: Event) => {
-        if ((e.target as HTMLInputElement).value) {
-          addEmail((e.target as HTMLInputElement).value);
-        }
-      },
-    },
-  }) as HTMLInputElement;
-  return [
-    elm,
-    () => {
-      elm.value = '';
-    },
-  ];
-}
-
-// creating email input element
-function hiddenEmailInput(name: string): hiddenEmailInputTuple {
-  const elm = input({
-    className: 'ei-email-input',
-    attributes: { type: 'email', multiple: '', name },
-  }) as HTMLInputElement;
-  return [
-    elm,
-    (value: string) => {
-      elm.value = value;
-    },
-  ];
 }

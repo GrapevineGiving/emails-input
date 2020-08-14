@@ -3,7 +3,7 @@ import { counter } from './utils';
 
 // A simple store that only takes care about adding and removing items.
 // it reduces the complexity of code in presentation layer.
-export function store(subscribe: subscribeType): Store {
+export function store(onChange: subscribeType): Store {
   // simple uid generator;
   const uid = counter();
 
@@ -19,12 +19,12 @@ export function store(subscribe: subscribeType): Store {
   function pushEmail(item: EmailItem) {
     const id = uid();
     data[id] = item;
-    subscribe(getValidEmails());
+    onChange(getValidEmails());
 
     // a function to removing the item from store
     return function remove() {
       delete data[id];
-      subscribe(getValidEmails());
+      onChange(getValidEmails());
     };
   }
 
