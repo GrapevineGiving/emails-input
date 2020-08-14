@@ -43,7 +43,12 @@ export default function EmailsInput(
   });
 
   function addEmail(text: string) {
-    append(emailsWrapper, emailBlock(text, pushEmail(text), validator));
+    const add = (email: string) => append(emailsWrapper, emailBlock(email, pushEmail(email), validator));
+    text
+      .split(',')
+      .map((str) => str.trim())
+      .filter(Boolean)
+      .forEach(add);
   }
 
   // defined text input
@@ -120,23 +125,30 @@ function emailTextInput({ addEmail, placeholder }: emailTextInputProps): emailTe
     attributes: { type: 'text', placeholder },
     events: {
       paste: (e: ClipboardEvent) => {
+        // IE11 doesn't support input event so we have to use pase event too
         const value = (e.clipboardData || (window as any).clipboardData).getData('text');
         console.log(e, value);
         if (value) {
           e.preventDefault();
-          (value as string)
-            .split(',')
-            .map((str) => str.trim())
-            .filter(Boolean)
-            .forEach(addEmail);
+          addEmail(value);
+        }
+      },
+      input: (e: InputEvent) => {
+        // in some android devices keypress event doesn't fire for all keys
+        // so input event could cover the functionality
+        const value = (e.target as HTMLInputElement).value;
+        if (value && value.search(',') >= 0) {
+          console.log('input event');
+          addEmail(value);
         }
       },
       keypress: (e: KeyboardEvent) => {
         const keyCode = e.keyCode || e.which;
+        const value = (e.target as HTMLInputElement).value;
         if (keyCode === 13 || keyCode === 44) {
           e.preventDefault(); // preventing to add comma into the input;
-          if ((e.target as HTMLInputElement).value) {
-            addEmail((e.target as HTMLInputElement).value);
+          if (value) {
+            addEmail(value);
           }
           return false;
         }
