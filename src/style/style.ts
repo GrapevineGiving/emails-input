@@ -2,7 +2,7 @@ import { randomString } from '../lib/utils';
 
 // returns component style that wrapped into a root selector
 function generateStyle(rootSelector = ''): string {
-  // generating uniq selectors by adding baseSelector;
+  // generating unique selectors by adding baseSelector;
   const baseSelector = `${rootSelector}.ei-component-wrapper`;
   const emailBlock = `${baseSelector} .ei-emails-wrapper .ei-email-block`;
   return `

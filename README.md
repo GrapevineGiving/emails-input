@@ -32,8 +32,8 @@ Using the component as a global function.
     var container = document.getElementById('emails-input');
     var myEmailInput = EmailInput(container, { name:"my-email-input" });
     myEmailInput.addEmail("my@email.com");
-    var count = myEmailInput.getEmailsCount();
-    var list = myEmailInput.getEmails();
+    var count = myEmailInput.getValidEmailsCount();
+    var list = myEmailInput.getValidEmails();
 </script>
 ```
 
@@ -67,7 +67,7 @@ function onChange(emails){
     console.log(emails)
 }
 
-const { addEmail, getEmailsCount, getEmails } = EmailInput(container, { name: 'my-email-input', onChange });
+const { addEmail, getValidEmailsCount, getValidEmails, getItems } = EmailInput(container, { name: 'my-email-input', onChange });
 ```
 
 ## Parameters
@@ -84,9 +84,11 @@ const { addEmail, getEmailsCount, getEmails } = EmailInput(container, { name: 'm
 | onChange | `(string[])=>void` | null | Email changes callback, you might need this functionality if you want to use the component in UI frameworks, 
 
 ## Output
+the component return a tuple with folwoing items
 * **addEmail** : it adds email to the component `(string)=> void`
-* **getEmailsCount** : it returns emails count `()=> number`
-* **getEmailsCount** : it returns emails as an list `()=>string[]`
+* **getValidEmailsCount** : it returns emails count `()=> number`
+* **getValidEmails** : it returns emails as an list `()=>string[]`
+* **getItems** : it returns all items as an list `()=>Array<{email, isValid}>`
 
 
 ## Custom styling

@@ -4,7 +4,6 @@ import { store } from './lib/store';
 import appendStye from './style/style';
 import {
   EmailsInputObj,
-  validatorType,
   EmailsInputProps,
   hiddenEmailInputTuple,
   emailTextInputProps,
@@ -34,21 +33,29 @@ export default function EmailsInput(
   }: EmailsInputProps,
 ): EmailsInputObj {
   // email store to manage adding an removing emails
-  const { push: pushEmail, get: getEmails } = store((emails: string[]) => {
+  const { pushEmail, getItems, getValidEmails, getValidEmailsCount } = store((emails) => {
+    // update email input element - we need this part in using components in forms.
     setEmailInput(emails.join(', '));
+
     clearTextInput();
+
     if (onChange) {
+      // notify the consumer about changes;
       onChange(emails);
     }
   });
 
+  function addEmailItem(email: string) {
+    const isValid = validator(email);
+    append(emailsWrapper, emailBlock(email, pushEmail({ email, isValid }), isValid));
+  }
+
   function addEmail(text: string) {
-    const add = (email: string) => append(emailsWrapper, emailBlock(email, pushEmail(email), validator));
     text
       .split(',')
       .map((str) => str.trim())
       .filter(Boolean)
-      .forEach(add);
+      .forEach(addEmailItem);
   }
 
   // defined text input
@@ -58,10 +65,10 @@ export default function EmailsInput(
   const [emailInput, setEmailInput] = hiddenEmailInput(name);
 
   // a wrapper element to render email blocks
-  const emailsWrapper = div(
-    { className: 'ei-emails-wrapper' },
-    ...list.map((email) => emailBlock(email, pushEmail(email), validator)),
-  );
+  const emailsWrapper = div({ className: 'ei-emails-wrapper' });
+
+  // adding initial list to the component;
+  addEmail(list.join(','));
 
   // main wrapper of the component
   const wrapper = div(
@@ -85,17 +92,18 @@ export default function EmailsInput(
   container.appendChild(wrapper);
 
   return {
-    getEmails,
+    getItems,
+    getValidEmails,
+    getValidEmailsCount,
     addEmail,
-    getEmailsCount: () => getEmails().length,
   };
 }
 
 // create email block
-function emailBlock(email: string, remove: () => void, validator: validatorType) {
+function emailBlock(email: string, remove: () => void, isValid: boolean) {
   const block = div(
     {
-      className: `ei-email-block ${validator(email) ? '' : 'ei-invalid'}`,
+      className: `ei-email-block ${isValid ? '' : 'ei-invalid'}`,
       events: {
         click(e: Event) {
           // we need this lin to prevent to focus on input

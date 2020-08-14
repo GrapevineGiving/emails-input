@@ -28,9 +28,10 @@ export type EmailsInputProps = {
 };
 
 export type EmailsInputObj = {
-  getEmails: () => string[];
+  getValidEmails: () => string[];
   addEmail: (email: string) => void;
-  getEmailsCount: () => number;
+  getValidEmailsCount: () => number;
+  getItems: () => EmailItem[];
 };
 
 export type hiddenEmailInputTuple = [HTMLInputElement, (value: string) => void];
@@ -41,3 +42,8 @@ export type emailTextInputProps = {
 };
 
 export type emailTextInputTuple = [HTMLInputElement, () => void];
+
+export type EmailItem = {
+  email: string;
+  isValid: boolean;
+};
