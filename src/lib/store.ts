@@ -41,9 +41,6 @@ export function store(subscribe: subscribeType): Store {
     };
   }
 
-  // runs subscribe after first tick
-  setTimeout(() => subscribe(getValidEmails()), 0);
-
   // exposed API
   return {
     pushEmail,

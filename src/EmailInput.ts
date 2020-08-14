@@ -67,9 +67,6 @@ export default function EmailsInput(
   // a wrapper element to render email blocks
   const emailsWrapper = div({ className: 'ei-emails-wrapper' });
 
-  // adding initial list to the component;
-  addEmail(list.join(','));
-
   // main wrapper of the component
   const wrapper = div(
     {
@@ -90,6 +87,9 @@ export default function EmailsInput(
 
   // append wrapper to the container
   container.appendChild(wrapper);
+
+  // adding initial list to the component;
+  addEmail(list.join(','));
 
   return {
     getItems,
