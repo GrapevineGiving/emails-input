@@ -1,6 +1,6 @@
 # another-emails-input
 
-**another-emails-input** is an `<input type="email" multiple>` but more fancy .
+**another-emails-input** is a fancy alternative for `<input type="email" multiple>`.
 
 ## Features
 
@@ -40,7 +40,7 @@ Using the component as a global function.
 Using the component in forms
 
 ```HTML
-<form onsumbit="onSubmit(e)">
+<form onsubmit="onSubmit(event)">
     <label>first name:</label>
     <input name="first-name" />
     <label>Emails</label>
@@ -48,8 +48,8 @@ Using the component in forms
 </form>
 <script>
     EmailInput(document.getElementById('emails-input'), { name:"emails-input" });
-    function onSumbit(e){
-        var form = e.target;
+    function onSubmit(event){
+        var form = event.target;
         console.log({
             firstName: form['first-name'].value,
             emails: form['emails-input'].value,
@@ -71,7 +71,7 @@ const { addEmail, getValidEmailsCount, getValidEmails, getItems } = EmailInput(c
 ```
 
 ## Parameters
-* `container` : the component will be rendered there.
+* `container` : Dom element - the component will be append to it.
 * `options` : extra options.
 ### Options
 | name | type | default | description

@@ -19,3 +19,8 @@ export function randomString(length: number): string {
 export function generateRandomEmail(): string {
   return `${randomString(5)}@${randomString(7)}.${randomString(3)}`;
 }
+
+export const counter = (start = 1) => {
+  let count = start;
+  return () => count++;
+};

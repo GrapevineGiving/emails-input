@@ -47,3 +47,12 @@ export type EmailItem = {
   email: string;
   isValid: boolean;
 };
+
+export type subscribeType = (list: string[]) => void;
+
+export type Store = {
+  pushEmail: (data: EmailItem) => () => void;
+  getItems: () => EmailItem[];
+  getValidEmails: () => string[];
+  getValidEmailsCount: () => number;
+};

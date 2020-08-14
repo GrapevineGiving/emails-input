@@ -1,20 +1,7 @@
-import { EmailItem } from '../type/types';
+import { EmailItem, subscribeType, Store } from '../type/types';
+import { counter } from './utils';
 
-const counter = (start = 1) => {
-  let count = start;
-  return () => count++;
-};
-
-type subscribeType = (list: string[]) => void;
-
-type Store = {
-  pushEmail: (data: EmailItem) => () => void;
-  getItems: () => EmailItem[];
-  getValidEmails: () => string[];
-  getValidEmailsCount: () => number;
-};
-
-// A simple store function that only takes care about adding and removing items.
+// A simple store that only takes care about adding and removing items.
 // it reduces the complexity of code in presentation layer.
 export function store(subscribe: subscribeType): Store {
   // simple uid generator;
@@ -22,13 +9,13 @@ export function store(subscribe: subscribeType): Store {
 
   const data: { [key: string]: EmailItem } = {};
 
-  // get valid emails as a string array;
+  // return valid emails as a string array;
   const getValidEmails = () =>
     Object.keys(data)
       .filter((id) => data[id].isValid)
       .map((id: string) => data[id].email);
 
-  // pushes an item to the store ans returns the remover
+  // pushes an item to the store and returns the remover
   function pushEmail(item: EmailItem) {
     const id = uid();
     data[id] = item;

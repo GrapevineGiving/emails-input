@@ -10,17 +10,15 @@ import {
   emailTextInputTuple,
 } from './type/types';
 
-// appends style to DOM and returns base class
+// appending style to DOM and returning base class
 const defaultBaseClass = appendStye();
 
-// Renders a rich emails input to the element
-// for flexibility it accepts
-// name: that will be added to a normal input email for using in submitting forms
+// EmailInput Component
 // list: initial list of emails
 // validator: for overriding default email validator function
 // baseClass: for applying custom style to the component.
 // if you pass it you should handel styling yourself
-// it returns a tuple of function to control the component
+// it returns a tuple of functions to control the component
 export default function EmailsInput(
   container: Node,
   {
@@ -32,9 +30,9 @@ export default function EmailsInput(
     onChange,
   }: EmailsInputProps,
 ): EmailsInputObj {
-  // email store to manage adding an removing emails
+  // email store to manage adding and removing emails
   const { pushEmail, getItems, getValidEmails, getValidEmailsCount } = store((emails) => {
-    // update email input element - we need this part in using components in forms.
+    // updates email input element - we need this input in forms.
     setEmailInput(emails.join(', '));
 
     clearTextInput();
@@ -45,11 +43,13 @@ export default function EmailsInput(
     }
   });
 
+  // add an email item to the store and append the email block
   function addEmailItem(email: string) {
     const isValid = validator(email);
     append(emailsWrapper, emailBlock(email, pushEmail({ email, isValid }), isValid));
   }
 
+  // split text to emails
   function addEmail(text: string) {
     text
       .split(',')
@@ -58,13 +58,13 @@ export default function EmailsInput(
       .forEach(addEmailItem);
   }
 
-  // defined text input
+  // get text input instance
   const [textInput, clearTextInput] = emailTextInput({ addEmail, placeholder });
 
   // hidden email input fo using on forms
   const [emailInput, setEmailInput] = hiddenEmailInput(name);
 
-  // a wrapper element to render email blocks
+  // wrapper element to render emails blocks
   const emailsWrapper = div({ className: 'ei-emails-wrapper' });
 
   // main wrapper of the component
@@ -91,6 +91,7 @@ export default function EmailsInput(
   // adding initial list to the component;
   addEmail(list.join(','));
 
+  // exposed APIs
   return {
     getItems,
     getValidEmails,
@@ -133,9 +134,8 @@ function emailTextInput({ addEmail, placeholder }: emailTextInputProps): emailTe
     attributes: { type: 'text', placeholder },
     events: {
       paste: (e: ClipboardEvent) => {
-        // IE11 doesn't support input event so we have to use pase event too
+        // IE11 doesn't support input event so we have to use paste event too
         const value = (e.clipboardData || (window as any).clipboardData).getData('text');
-        console.log(e, value);
         if (value) {
           e.preventDefault();
           addEmail(value);
@@ -146,7 +146,6 @@ function emailTextInput({ addEmail, placeholder }: emailTextInputProps): emailTe
         // so input event could cover the functionality
         const value = (e.target as HTMLInputElement).value;
         if (value && value.search(',') >= 0) {
-          console.log('input event');
           addEmail(value);
         }
       },
