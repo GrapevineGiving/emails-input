@@ -1,7 +1,12 @@
 import { div, removeNode, span, text } from '../lib/genElm';
+import { StoreRemoverType } from '../type/types';
 
 // create email block
-export default function emailBlock(email: string, remove: () => void, isValid: boolean): HTMLDivElement {
+export default function emailBlock(
+  email: string,
+  { remove, setOnRemoveCb }: StoreRemoverType,
+  isValid: boolean,
+): HTMLDivElement {
   const block = div(
     {
       className: `ei-email-block ${isValid ? '' : 'ei-invalid'}`,
@@ -18,11 +23,15 @@ export default function emailBlock(email: string, remove: () => void, isValid: b
       events: {
         click(e: Event) {
           e.stopPropagation();
-          removeNode(block);
           remove();
         },
       },
     }),
   ) as HTMLDivElement;
+
+  setOnRemoveCb(() => {
+    removeNode(block);
+  });
+
   return block;
 }

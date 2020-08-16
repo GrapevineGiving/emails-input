@@ -1,15 +1,16 @@
 import { div, append } from '../lib/genElm';
 import emailBlock from './emailBlock';
+import { StoreRemoverType } from '../type/types';
 
-type appendEmailType = (email: string, remover: () => void, isValid: boolean) => void;
+type appendEmailType = (email: string, storeRemover: StoreRemoverType, isValid: boolean) => void;
 
 export default function emailsWrapper(): [HTMLDivElement, appendEmailType] {
   const emailsWrapper = div({ className: 'ei-emails-wrapper' }) as HTMLDivElement;
 
-  function appendEmail(email: string, remover: () => void, isValid: boolean) {
-    const block = emailBlock(email, remover, isValid);
+  const appendEmail: appendEmailType = (email, storeRemover, isValid) => {
+    const block = emailBlock(email, storeRemover, isValid);
     append(emailsWrapper, block);
-  }
+  };
 
   return [emailsWrapper, appendEmail];
 }

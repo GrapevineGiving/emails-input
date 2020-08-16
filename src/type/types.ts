@@ -46,12 +46,18 @@ export type emailTextInputTuple = [HTMLInputElement, () => void];
 export type EmailItem = {
   email: string;
   isValid: boolean;
+  remove?: () => void;
 };
 
 export type subscribeType = (list: string[]) => void;
 
+export type StoreRemoverType = {
+  remove: () => void;
+  setOnRemoveCb: (cb: () => void) => void;
+};
+
 export type Store = {
-  pushEmail: (data: EmailItem) => () => void;
+  pushEmail: (data: EmailItem) => StoreRemoverType;
   getItems: () => EmailItem[];
   getValidEmails: () => string[];
   getValidEmailsCount: () => number;

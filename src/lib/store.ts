@@ -18,13 +18,29 @@ export function store(onChange: subscribeType): Store {
   // pushes an item to the store and returns the remover
   function pushEmail(item: EmailItem) {
     const id = uid();
-    data[id] = item;
-    onChange(getValidEmails());
+    data[id] = { ...item, remove };
+    // a callback to call after removing an item
+    let onRemoveCB: () => void;
 
     // a function to removing the item from store
-    return function remove() {
+    function remove() {
       delete data[id];
+      if (onRemoveCB) {
+        onRemoveCB();
+      }
       onChange(getValidEmails());
+    }
+
+    // we need to notify consumers about removing an itrm.
+    function setOnRemoveCb(cb: () => void) {
+      onRemoveCB = onRemoveCB || cb;
+    }
+
+    onChange(getValidEmails());
+
+    return {
+      remove,
+      setOnRemoveCb,
     };
   }
 

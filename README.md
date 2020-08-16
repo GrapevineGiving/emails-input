@@ -34,6 +34,8 @@ Using the component as a global function.
     myEmailInput.addEmail("my@email.com");
     var count = myEmailInput.getValidEmailsCount();
     var list = myEmailInput.getValidEmails();
+    // remove the first item from the list;
+    myEmailInput.getItems()[0].remove();
 </script>
 ```
 
@@ -88,7 +90,7 @@ the component return a tuple with folwoing items
 * **addEmail** : it adds email to the component `(string)=> void`
 * **getValidEmailsCount** : it returns emails count `()=> number`
 * **getValidEmails** : it returns emails as an list `()=>string[]`
-* **getItems** : it returns all items as an list `()=>Array<{email, isValid}>`
+* **getItems** : it returns all items as an list `()=>Array<{email:string, isValid: boolean, remove:()=>void}>` *Note: remove is a function to remove an item form the component*
 
 
 ## Custom styling
