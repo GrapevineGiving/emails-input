@@ -47,7 +47,7 @@ export function store(onChange: subscribeType): Store {
   // exposed API
   return {
     pushEmail,
-    getItems: () => Object.keys(data).map((id: string) => data[id]),
+    getItems: () => Object.keys(data).map((id: string) => ({ ...data[id] })),
     getValidEmails,
     getValidEmailsCount: () => getValidEmails().length,
   };
