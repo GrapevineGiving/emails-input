@@ -49,7 +49,7 @@ export default function EmailsInput(
   // split text to emails
   function addEmail(text: string) {
     text
-      .split(',')
+      .split(/,|\n/)
       .map((str) => str.trim())
       .filter(Boolean)
       .forEach(addEmailItem);
