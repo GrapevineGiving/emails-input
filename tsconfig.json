@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
-    "outDir": "./build/",
-    "noImplicitAny": true,
+    "declarationDir": "./dist",
     "module": "es6",
-    "target": "es5",
-    "jsx": "react",
-    "allowJs": true,
     "declaration": true,
+    "noImplicitAny": true,
+    "outDir": "./dist",
+    "target": "es5"
   },
-  "files": ["./src/index.ts"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": ["node_modules"]
 }

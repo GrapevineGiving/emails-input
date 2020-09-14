@@ -1,12 +1,16 @@
 {
-  "name": "another-emails-input",
-  "version": "2.1.1",
-  "description": "",
-  "main": "build/index.js",
+  "name": "emails-input",
+  "version": "1.0.0",
+  "description": "Just another emails input",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
   "scripts": {
-    "start": "webpack --watch",
-    "build": "webpack & tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rollup -c",
+    "watch": "rollup -cw"
   },
   "repository": {
     "type": "git",
@@ -25,9 +29,9 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "prettier": "^2.0.5",
+    "rollup": "^2.26.11",
+    "rollup-plugin-typescript2": "^0.27.2",
     "ts-loader": "^8.0.2",
-    "typescript": "^3.9.7",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "typescript": "^3.9.7"
   }
 }
