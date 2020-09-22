@@ -3,7 +3,7 @@ import emailTextInput from './elements/emailTextInput';
 import hiddenEmailInput from './elements/hiddenEmailInput';
 import { div } from './lib/genElm';
 import { store } from './lib/store';
-import { validateEmail } from './lib/utils';
+import { cleanEmail, validateEmail } from './lib/utils';
 import appendStye from './style/style';
 import { EmailsInputObj, EmailsInputProps } from './type/types';
 
@@ -12,8 +12,9 @@ const defaultBaseClass = appendStye();
 
 // EmailInput Component
 // list: initial list of emails
+// cleaner: for overriding default email cleaner function
 // validator: for overriding default email validator function
-// baseClass: for applying custom style to the component.
+// baseClass: for applying custom style to the component
 // if you pass it you should handel styling yourself
 // it returns a tuple of functions to control the component
 export default function EmailsInput(
@@ -21,7 +22,8 @@ export default function EmailsInput(
   {
     name,
     list,
-    placeholder = 'add more people…',
+    placeholder = 'Add more people…',
+    cleaner = cleanEmail,
     validator = validateEmail,
     baseClass = defaultBaseClass,
     onChange,
@@ -41,6 +43,7 @@ export default function EmailsInput(
 
   // add an email item to the store and append the email block
   function addEmailItem(email: string) {
+    email = cleaner(email);
     const isValid = validator(email);
     const itemRemover = pushEmail({ email, isValid });
     appendEmail(email, itemRemover, isValid);

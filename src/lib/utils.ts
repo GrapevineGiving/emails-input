@@ -1,3 +1,8 @@
+export function cleanEmail(email: string): string {
+  const regex = /[^ a-zA-Z0-9!#$%&@'*+-/=?^_`{|}~.]+/g;
+  return email.replace(regex, '');
+}
+
 export function validateEmail(email: string): boolean {
   const regex = /[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\.[a-z0-9-]+)*/i;
   return regex.test(email);
