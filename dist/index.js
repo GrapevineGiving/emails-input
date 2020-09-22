@@ -195,6 +195,10 @@ function hiddenEmailInput(name) {
     ];
 }
 
+function cleanEmail(email) {
+    var regex = /[^ a-zA-Z0-9!#$%&@'*+-/=?^_`{|}~.]+/g;
+    return email.replace(regex, '');
+}
 function validateEmail(email) {
     var regex = /[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\.[a-z0-9-]+)*/i;
     return regex.test(email);
@@ -287,14 +291,15 @@ function appendStye() {
 var defaultBaseClass = appendStye();
 // EmailInput Component
 // list: initial list of emails
+// cleaner: for overriding default email cleaner function
 // validator: for overriding default email validator function
-// baseClass: for applying custom style to the component.
+// baseClass: for applying custom style to the component
 // if you pass it you should handel styling yourself
 // it returns a tuple of functions to control the component
 function EmailsInput(container, _a) {
-    var name = _a.name, list = _a.list, _b = _a.placeholder, placeholder = _b === void 0 ? 'add more people…' : _b, _c = _a.validator, validator = _c === void 0 ? validateEmail : _c, _d = _a.baseClass, baseClass = _d === void 0 ? defaultBaseClass : _d, onChange = _a.onChange;
+    var name = _a.name, list = _a.list, _b = _a.placeholder, placeholder = _b === void 0 ? 'Add more people…' : _b, _c = _a.cleaner, cleaner = _c === void 0 ? cleanEmail : _c, _d = _a.validator, validator = _d === void 0 ? validateEmail : _d, _e = _a.baseClass, baseClass = _e === void 0 ? defaultBaseClass : _e, onChange = _a.onChange;
     // email store to manage adding and removing emails
-    var _e = store(function (emails) {
+    var _f = store(function (emails) {
         // updates email input element - we need this input in forms.
         setEmailInput(emails.join(', '));
         clearTextInput();
@@ -302,9 +307,10 @@ function EmailsInput(container, _a) {
             // notify the consumer about changes;
             onChange(emails);
         }
-    }), pushEmail = _e.pushEmail, getItems = _e.getItems, getValidEmails = _e.getValidEmails, getValidEmailsCount = _e.getValidEmailsCount;
+    }), pushEmail = _f.pushEmail, getItems = _f.getItems, getValidEmails = _f.getValidEmails, getValidEmailsCount = _f.getValidEmailsCount;
     // add an email item to the store and append the email block
     function addEmailItem(email) {
+        email = cleaner(email);
         var isValid = validator(email);
         var itemRemover = pushEmail({ email: email, isValid: isValid });
         appendEmail(email, itemRemover, isValid);
@@ -318,11 +324,11 @@ function EmailsInput(container, _a) {
             .forEach(addEmailItem);
     }
     // get text input instance
-    var _f = emailTextInput({ addEmail: addEmail, placeholder: placeholder }), textInput = _f[0], clearTextInput = _f[1];
+    var _g = emailTextInput({ addEmail: addEmail, placeholder: placeholder }), textInput = _g[0], clearTextInput = _g[1];
     // hidden email input fo using on forms
-    var _g = hiddenEmailInput(name), emailInput = _g[0], setEmailInput = _g[1];
+    var _h = hiddenEmailInput(name), emailInput = _h[0], setEmailInput = _h[1];
     // wrapper element to render emails blocks
-    var _h = emailsWrapper(), emailsWrapperElm = _h[0], appendEmail = _h[1];
+    var _j = emailsWrapper(), emailsWrapperElm = _j[0], appendEmail = _j[1];
     // main wrapper of the component
     var wrapper = div({
         className: baseClass + " ei-component-wrapper",

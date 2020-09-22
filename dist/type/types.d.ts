@@ -12,11 +12,13 @@ export declare type ExtendedHTMLElement = HTMLElement & {
     clearListeners?: () => void;
 };
 export declare type genElmType = (type: ElementTypes) => (props?: ElementProps, ...children: Node[]) => ExtendedHTMLElement;
+export declare type cleanerType = (str: string) => string;
 export declare type validatorType = (str: string) => boolean;
 export declare type EmailsInputProps = {
     name: string;
     list: string[];
     placeholder: string;
+    cleaner: cleanerType;
     validator: validatorType;
     baseClass: string;
     onChange?: (emails: string[]) => void;
