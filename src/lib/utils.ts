@@ -1,5 +1,7 @@
 export function cleanEmail(email: string): string {
+  console.log('cleanEmail');
   const regex = /[^ a-zA-Z0-9!#$%&@'*+-/=?^_`{|}~.]+/g;
+  console.log(email.replace(regex, ''));
   return email.replace(regex, '');
 }
 
