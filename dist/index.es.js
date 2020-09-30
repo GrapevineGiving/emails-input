@@ -194,13 +194,11 @@ function hiddenEmailInput(name) {
 }
 
 function cleanEmail(email) {
-    console.log('cleanEmail');
     var regex = /[^ a-zA-Z0-9!#$%&@'*+-/=?^_`{|}~.]+/g;
-    console.log(email.replace(regex, ''));
     return email.replace(regex, '');
 }
 function validateEmail(email) {
-    var regex = /[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\.[a-z0-9-]+)*/i;
+    var regex = /[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[^\s@]+\.[^\s@]+$/i;
     return regex.test(email);
 }
 function randomChar() {
