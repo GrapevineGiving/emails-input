@@ -196,7 +196,7 @@ function hiddenEmailInput(name) {
 }
 
 function cleanEmail(email) {
-    var regex = /[^ a-zA-Z0-9!#$%&@'*+-/=?^_`{|}~.]+/g;
+    var regex = /[^ \sa-zA-Z0-9!#$%&@'*+-/=?^_`{|}~.]+/g;
     return email.replace(regex, '');
 }
 function validateEmail(email) {
