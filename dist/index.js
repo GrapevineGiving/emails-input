@@ -311,20 +311,18 @@ function EmailsInput(container, _a) {
     }), pushEmail = _f.pushEmail, getItems = _f.getItems, getValidEmails = _f.getValidEmails, getValidEmailsCount = _f.getValidEmailsCount;
     // add an email item to the store and append the email block
     function addEmailItem(email) {
-        email = cleaner(email);
-        var isValid = validator(email);
-        var itemRemover = pushEmail({ email: email, isValid: isValid });
-        appendEmail(email, itemRemover, isValid);
+        if (getItems().length < limit) {
+            email = cleaner(email);
+            var isValid = validator(email);
+            var itemRemover = pushEmail({ email: email, isValid: isValid });
+            appendEmail(email, itemRemover, isValid);
+        }
     }
     // split text to emails
     function addEmail(text) {
-        var emails = text
+        text
             .split(/,|\n/)
-            .map(function (str) { return str.trim(); });
-        if (limit > 0) {
-            emails = emails.splice(0, limit);
-        }
-        emails
+            .map(function (str) { return str.trim(); })
             .filter(Boolean)
             .forEach(addEmailItem);
     }
