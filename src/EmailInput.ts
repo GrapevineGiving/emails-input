@@ -45,23 +45,19 @@ export default function EmailsInput(
 
   // add an email item to the store and append the email block
   function addEmailItem(email: string) {
-    email = cleaner(email);
-    const isValid = validator(email);
-    const itemRemover = pushEmail({ email, isValid });
-    appendEmail(email, itemRemover, isValid);
+    if (getItems().length < limit) {
+      email = cleaner(email);
+      const isValid = validator(email);
+      const itemRemover = pushEmail({ email, isValid });
+      appendEmail(email, itemRemover, isValid);
+    }
   }
 
   // split text to emails
   function addEmail(text: string) {
-    let emails: string[] = text
+    text
       .split(/,|\n/)
-      .map(function (str) { return str.trim(); });
-
-    if (limit > 0) {
-      emails = emails.splice(0, limit);
-    }
-    
-    emails
+      .map(function (str) { return str.trim(); })
       .filter(Boolean)
       .forEach(addEmailItem);
   }
