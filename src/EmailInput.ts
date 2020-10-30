@@ -12,6 +12,7 @@ const defaultBaseClass = appendStye();
 
 // EmailInput Component
 // list: initial list of emails
+// limit: max number of items
 // cleaner: for overriding default email cleaner function
 // validator: for overriding default email validator function
 // baseClass: for applying custom style to the component
@@ -22,6 +23,7 @@ export default function EmailsInput(
   {
     name,
     list,
+    limit,
     placeholder = 'Add more people…',
     cleaner = cleanEmail,
     validator = validateEmail,
@@ -51,9 +53,15 @@ export default function EmailsInput(
 
   // split text to emails
   function addEmail(text: string) {
-    text
+    let emails: string[] = text
       .split(/,|\n/)
-      .map((str) => str.trim())
+      .map(function (str) { return str.trim(); });
+
+    if (limit > 0) {
+      emails = emails.splice(0, limit);
+    }
+    
+    emails
       .filter(Boolean)
       .forEach(addEmailItem);
   }

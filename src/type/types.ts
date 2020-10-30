@@ -23,6 +23,7 @@ export type validatorType = (str: string) => boolean;
 export type EmailsInputProps = {
   name: string;
   list: string[];
+  limit: number;
   placeholder: string;
   cleaner: cleanerType;
   validator: validatorType;
