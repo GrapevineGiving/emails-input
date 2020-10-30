@@ -289,13 +289,14 @@ function appendStye() {
 var defaultBaseClass = appendStye();
 // EmailInput Component
 // list: initial list of emails
+// limit: max number of items
 // cleaner: for overriding default email cleaner function
 // validator: for overriding default email validator function
 // baseClass: for applying custom style to the component
 // if you pass it you should handel styling yourself
 // it returns a tuple of functions to control the component
 function EmailsInput(container, _a) {
-    var name = _a.name, list = _a.list, _b = _a.placeholder, placeholder = _b === void 0 ? 'Add more people…' : _b, _c = _a.cleaner, cleaner = _c === void 0 ? cleanEmail : _c, _d = _a.validator, validator = _d === void 0 ? validateEmail : _d, _e = _a.baseClass, baseClass = _e === void 0 ? defaultBaseClass : _e, onChange = _a.onChange;
+    var name = _a.name, list = _a.list, limit = _a.limit, _b = _a.placeholder, placeholder = _b === void 0 ? 'Add more people…' : _b, _c = _a.cleaner, cleaner = _c === void 0 ? cleanEmail : _c, _d = _a.validator, validator = _d === void 0 ? validateEmail : _d, _e = _a.baseClass, baseClass = _e === void 0 ? defaultBaseClass : _e, onChange = _a.onChange;
     // email store to manage adding and removing emails
     var _f = store(function (emails) {
         // updates email input element - we need this input in forms.
@@ -315,9 +316,13 @@ function EmailsInput(container, _a) {
     }
     // split text to emails
     function addEmail(text) {
-        text
+        var emails = text
             .split(/,|\n/)
-            .map(function (str) { return str.trim(); })
+            .map(function (str) { return str.trim(); });
+        if (limit > 0) {
+            emails = emails.splice(0, limit);
+        }
+        emails
             .filter(Boolean)
             .forEach(addEmailItem);
     }
